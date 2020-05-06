@@ -1,3 +1,6 @@
 [submodule "toflow"]
 	path = toflow
 	url = https://github.com/anchen1011/toflow.git
+[submodule "pytoflow"]
+	path = pytoflow
+	url = https://github.com/Coldog2333/pytoflow.git

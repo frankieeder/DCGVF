@@ -25,22 +25,46 @@ x=2
     .output('pipe:', vframes=1, format='image2', vcodec='mjpeg')
     .run(capture_stdout=True)
 )'''
-out, err = (
+'''out, err = (
     ffmpeg
     .input(all_files[0])
-    .output('pipe:', format='rawvideo', pix_fmt='rgb24', vf="select='between(n\,0\,7)'")#, **{'c:v': 'libx264'})#, '-b:v': '200k'})
+    .output('pipe:', format='rawvideo', pix_fmt='rgb24', vf="select='between(n\,0\,7)'")
+    .run(capture_stdout=True)#, '-b:v': '200k'})
+)
+x=2
+out, err = (
+    ffmpeg
+    .input(out)
+    .output('pipe:', format='rawvideo', pix_fmt='rgb24')#, '-b:v': '200k'})
     .run(capture_stdout=True)
 )
 #print(out)
 x=2
 video_h264 = np.frombuffer(out, np.uint8).reshape([-1, h, w, 3])
+x=2'''
+in_file = ffmpeg.input(all_files[0])#, vf="select='between(n\,0\,7)'", vsync=0)
+video_prores_stream, err = in_file.output(
+    'pipe:',
+    format='rawvideo',
+    pix_fmt='rgb48',
+    vf="select='between(n\,0\,7)'",
+    vsync=0
+).run(capture_stdout=True)
+video_prores = np.frombuffer(video_prores_stream, np.uint16).reshape([-1, h, w, 3])
 x=2
-out, err = (
+video_h264_stream = (
+    ffmpeg.input(all_files[0])
+    .output('pipe:', format='rawvideo', pix_fmt='rgb24', vcodec='h264')
+    .input('pipe:')
+    .output('pipe:', format='rawvideo', pix_fmt='rgb24')
+)
+video_h264 = np.frombuffer(video_h264_stream.run(), np.uint8).reshape([-1, h, w, 3])
+'''out, err = (
     ffmpeg
-    .input(all_files[0])
+    
     .output('pipe:', format='rawvideo', pix_fmt='rgb48', vf="select='between(n\,0\,7)'", vsync=0)
     .run(capture_stdout=True)
-)
+)'''
 video_prores = np.frombuffer(out, np.uint16).reshape([-1, h, w, 3])
 a = (video_prores / (2**16)) - (video_h264 / (2**8))
 a -= a.min()
