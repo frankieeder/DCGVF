@@ -3,12 +3,13 @@ import os
 import os.path as osp
 import ffmpeg
 
+
 class BDIPreProcessor:
     """Creates a dataset by randomly sampling the input files."""
 
     def __init__(self, data_folder, out_folder, output_size, size_targ, stride,
                  reference_ind, ns_retrieval,
-                 search_suffix="", files_per_folder=50, start_count=0):
+                 search_suffix="", files_per_folder=50, start_count=None):
         self.data_folder = data_folder
         self.out_folder = out_folder
         self.output_size = output_size
@@ -17,7 +18,6 @@ class BDIPreProcessor:
         self.reference_ind = reference_ind
         self.ns_retrieval = ns_retrieval
         self.files_per_folder = files_per_folder
-        self.count = start_count
 
         self.all_files = []
         for root, folders, files in os.walk(self.data_folder):
@@ -28,6 +28,19 @@ class BDIPreProcessor:
                 if f.endswith(search_suffix)
             ])
         print(self.all_files)
+
+        if not start_count:
+            out_files = []
+            for root, folders, files in os.walk(self.out_folder):
+                out_files.extend([
+                    osp.join(root, f)
+                    for f
+                    in files
+                ])
+            self.count = max(int(os.path.basename(f[:-4])) for f in out_files)
+            print(f'No start count given, starting at {self.count}')
+        else:
+            self.count = start_count
 
         self.info = []
         failed = []
