@@ -52,7 +52,7 @@ def save_checkpoint(net, optimizer, epoch, losses, savepath):
 
 
 def load_checkpoint(net, optimizer, checkpoint_path):
-    checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
+    checkpoint = torch.load(checkpoint_path, map_location=torch.device('cuda:0'))
 
     net.cuda_flag = checkpoint['cuda_flag']
     net.height = checkpoint['h']
@@ -134,7 +134,7 @@ val_loader = DataLoader(vd, sampler=val_sampler, num_workers=4)
 test_loader = DataLoader(vd, sampler=test_sampler, num_workers=4)
 
 # Load Pretrained Model
-toflow = TOFlow(h, w, task=task, cuda_flag=cuda_flag)#.cuda()
+toflow = TOFlow(h, w, task=task, cuda_flag=cuda_flag).cuda()
 optimizer = torch.optim.Adam(toflow.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
 
 # Train
@@ -147,7 +147,7 @@ check_loss = 1
 sample_size = len(vd)
 
 if not use_checkpoint:
-    toflow.load_state_dict(torch.load(pretrained_model_path, map_location=torch.device('cpu')))
+    toflow.load_state_dict(torch.load(pretrained_model_path, map_location=torch.device('cuda:0')))
 else:
     toflow, optimizer, start_epoch, ploty = load_checkpoint(toflow, optimizer, checkpoint_path)
     plotx = list(range(len(ploty)))
@@ -160,11 +160,11 @@ for epoch in range(start_epoch, EPOCH):
     for step, sample in enumerate(train_loader):
         print(step)
         x, y = sample
-        x = x#.cuda()
-        reference = y#.cuda()
+        x = x.cuda()
+        reference = y.cuda()
 
         prediction = toflow(x)
-        prediction = prediction#.cuda()
+        prediction = prediction.cuda()
         loss = loss_func(prediction, reference)
 
         # losses += loss                # the reason why oom happened
