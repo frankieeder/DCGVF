@@ -12,9 +12,9 @@ def visual_results(x, y, toflow, name):
     max_diff = diff.max()
     diff /= max_diff
 
-    x_torch = torch.from_numpy(np.transpose(x, (0, 3, 1, 2))[np.newaxis,...].astype(np.float32)).cuda()
+    x_torch = torch.from_numpy(x).cuda()
     y_hat = toflow(x_torch).cpu().detach().numpy()
-    y_hat = np.transpose(y_hat, (0, 2, 3, 1))[0]
+    y_hat = y_hat[0]
     res = y_hat - y
     res -= res.min()
     res /= max_diff # Scale same as original...
