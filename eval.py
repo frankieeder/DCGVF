@@ -61,15 +61,21 @@ train_loader = DataLoader(vd, sampler=train_sampler, num_workers=2)
 val_loader = DataLoader(vd, sampler=val_sampler, num_workers=2)
 test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
+tl_iter = iter(train_loader)
 for i in range(5):
-    x, y = train_loader[i]
+    print(i)
+    x, y = next(tl_iter)
     visual_results(x, y, toflow, f'train{i}result.png')
 
+vl_iter = iter(val_loader)
 for i in range(5):
-    x, y = val_loader[i]
+    print(i)
+    x, y = next(vl_iter)
     visual_results(x, y, toflow, f'val{i}result.png')
 
+testl_iter = iter(test_loader)
 for i in range(5):
-    x, y = test_loader[i]
+    print(i)
+    x, y = next(testl_iter)
     visual_results(x, y, toflow, f'test{i}result.png')
 
