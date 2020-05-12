@@ -129,9 +129,9 @@ val_sampler = SubsetRandomSampler(val_ind)
 test_sampler = SubsetRandomSampler(test_ind)
 
 # Dataloader
-train_loader = DataLoader(vd, sampler=train_sampler, num_workers=4)
-val_loader = DataLoader(vd, sampler=val_sampler, num_workers=4)
-test_loader = DataLoader(vd, sampler=test_sampler, num_workers=4)
+train_loader = DataLoader(vd, sampler=train_sampler, num_workers=2)
+val_loader = DataLoader(vd, sampler=val_sampler, num_workers=2)
+test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
 # Load Pretrained Model
 toflow = TOFlow(h, w, task=task, cuda_flag=cuda_flag).cuda()
