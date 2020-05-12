@@ -5,6 +5,10 @@ import torch
 from torch.utils.data import SubsetRandomSampler, DataLoader
 from pytoflow.Network import TOFlow
 
+def show_sample(m):
+    plt.imshow(np.transpose(m, (1, 2, 0)))
+    plt.axis('off')
+
 def visual_results(x, y, toflow, name):
     x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
     diff = x[3] - y
@@ -29,7 +33,7 @@ def visual_results(x, y, toflow, name):
     for i in range(1, rows +1):
         img = ims[i-1]
         fig.add_subplot(rows, columns, i)
-        plt.imshow(img)
+        show_sample(img)
         fig.add_subplot(rows, columns, i+1)
         plt.hist(img.flatten())
     plt.savefig(name)
