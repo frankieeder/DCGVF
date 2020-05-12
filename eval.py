@@ -12,7 +12,7 @@ def visual_results(x, y, toflow, name):
     max_diff = diff.max()
     diff /= max_diff
 
-    x_torch = torch.from_numpy(x).cuda()
+    x_torch = torch.from_numpy(x[np.newaxis, ...]).cuda()
     y_hat = toflow(x_torch).cpu().detach().numpy()
     y_hat = y_hat[0]
     res = y_hat - y
