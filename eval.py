@@ -30,7 +30,7 @@ def visual_results(x, y, toflow, name):
     fig=plt.figure(figsize=(16, 16))
     columns = 2
     rows = 5
-    for i in range(1, rows +1):
+    for i in range(1, rows +1, 2):
         img = ims[i-1]
         fig.add_subplot(rows, columns, i)
         show_sample(img)
