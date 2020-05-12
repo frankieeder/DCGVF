@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 
 task = 'denoising'
-cuda_flag = False
+cuda_flag = True
 pretrained_model_path = './pytoflow/toflow_models/denoise.pkl'
 
 def show_time(now):
