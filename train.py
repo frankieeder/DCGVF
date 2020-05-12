@@ -101,7 +101,7 @@ LR_strategy = []
 h = 256
 w = 448
 
-use_checkpoint = True
+use_checkpoint = False
 checkpoint_path = '../dcgvf_data/checkpoint_1epoch.ckpt'
 work_place = '.'
 model_name = 'denoise_decomp'
