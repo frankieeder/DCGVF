@@ -102,7 +102,7 @@ h = 256
 w = 448
 
 use_checkpoint = True
-checkpoint_path = './checkpoints/checkpoint_1epoch.ckpt'
+checkpoint_path = '../dcgvf_data/checkpoint_1epoch.ckpt'
 work_place = '.'
 model_name = 'denoise_decomp'
 Training_pic_path = 'Training_result.jpg'
@@ -111,7 +111,7 @@ model_information_txt = model_name + '_information.txt'
 loss_func = torch.nn.L1Loss()
 
 # Dataset
-vd = SampleDataset("./data/processed_decomp")
+vd = SampleDataset("../dcgvf_data/processed_decomp")
 if False:
     for i in range(3):
         compare_sample(vd[i])
