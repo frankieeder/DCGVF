@@ -23,8 +23,6 @@ def visual_results(x, y, toflow, name):
     res -= res.min()
     res /= max_diff # Scale same as original...
 
-    ims = [, y_hat, y, diff, res]
-
     w=5000
     h=5000
     fig=plt.figure(figsize=(16, 16))
