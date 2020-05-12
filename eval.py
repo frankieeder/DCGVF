@@ -23,19 +23,39 @@ def visual_results(x, y, toflow, name):
     res -= res.min()
     res /= max_diff # Scale same as original...
 
-    ims = [x[3], y_hat, y, diff, res]
+    ims = [, y_hat, y, diff, res]
 
     w=5000
     h=5000
     fig=plt.figure(figsize=(16, 16))
     columns = 2
     rows = 5
-    for i in range(1, rows +1, 2):
-        img = ims[i-1]
-        fig.add_subplot(rows, columns, i)
-        show_sample(img)
-        fig.add_subplot(rows, columns, i+1)
-        plt.hist(img.flatten())
+    fig.add_subplot(rows, columns, 1)
+    show_sample(x[3])
+    fig.add_subplot(rows, columns, 2)
+    plt.hist(x[3].flatten())
+
+    fig.add_subplot(rows, columns, 3)
+    show_sample(y_hat)
+    fig.add_subplot(rows, columns, 4)
+    plt.hist(y_hat.flatten())
+
+    fig.add_subplot(rows, columns, 9)
+    show_sample(res)
+    fig.add_subplot(rows, columns, 10)
+    plt.hist(res.flatten())
+
+    fig.add_subplot(rows, columns, 5)
+    show_sample(y)
+    fig.add_subplot(rows, columns, 6)
+    plt.hist(y.flatten())
+
+    fig.add_subplot(rows, columns, 7)
+    show_sample(diff)
+    fig.add_subplot(rows, columns, 8)
+    plt.hist(diff.flatten())
+
+
     plt.savefig(name)
 
 
