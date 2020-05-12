@@ -6,7 +6,7 @@ from torch.utils.data import SubsetRandomSampler, DataLoader
 from pytoflow.Network import TOFlow
 
 def visual_results(x, y, toflow, name):
-    x, y = x[0], y[0]
+    x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
     diff = x[3] - y
     diff -= diff.min()
     max_diff = diff.max()
