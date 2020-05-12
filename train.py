@@ -175,34 +175,41 @@ for epoch in range(start_epoch, EPOCH):
         optimizer.step()
 
         count += len(x)
+        avg_loss = losses / (step + 1)
         if count % 10 == 0:
             print('%s  Processed %d (%0.2f%%) triples.\tMemory used %0.2f%%.\tCpu used %0.2f%%.' %
                   (
                   show_time(datetime.datetime.now()), count, count / sample_size * 100, psutil.virtual_memory().percent,
                   psutil.cpu_percent(1)))
             print('\n%s  epoch %d: Average_loss=%f\n' % (
-            show_time(datetime.datetime.now()), epoch + 1, losses / (step + 1)))
+            show_time(datetime.datetime.now()), epoch + 1, avg_loss))
+
+        if count % 1000 == 0:
+            print("Checkpointing...")
+            # Plot
+            plotx.append((epoch + 1, step))
+            ploty.append(avg_loss)
+            '''if epoch // 1 == epoch / 1:
+                plt.plot(plotx, ploty)
+                plt.savefig(Training_pic_path)'''
+
+            # checkpoint and then prepare for the next epoch
+            if not os.path.exists('./checkpoints'):
+                os.mkdir('./checkpoints')
+            save_checkpoint(toflow, optimizer, epoch + 1, ploty, './checkpoints/checkpoint_%depoch_%dstep.ckpt' % (epoch + 1, step))
+
+            if check_loss > avg_loss:
+                print('\n%s Saving the best model temporarily...' % show_time(datetime.datetime.now()))
+                if not os.path.exists(os.path.join(work_place, 'toflow_models')):
+                    os.mkdir(os.path.join(work_place, 'toflow_models'))
+                torch.save(toflow.state_dict(),
+                           os.path.join(work_place, 'toflow_models', model_name + '_best_params.pkl'))
+                print('Saved.\n')
+                check_loss = avg_loss
 
     # learning rate strategy
     if epoch in LR_strategy:
         optimizer.param_groups[0]['lr'] /= 10
 
-    plotx.append(epoch + 1)
-    ploty.append(losses / (step + 1))
-    if epoch // 1 == epoch / 1:
-        plt.plot(plotx, ploty)
-        plt.savefig(Training_pic_path)
 
-    # checkpoint and then prepare for the next epoch
-    if not os.path.exists('./checkpoints'):
-        os.mkdir('./checkpoints')
-    save_checkpoint(toflow, optimizer, epoch + 1, ploty, './checkpoints/checkpoint_%depoch.ckpt' % (epoch + 1))
-
-    if check_loss > losses / (step + 1):
-        print('\n%s Saving the best model temporarily...' % show_time(datetime.datetime.now()))
-        if not os.path.exists(os.path.join(work_place, 'toflow_models')):
-            os.mkdir(os.path.join(work_place, 'toflow_models'))
-        torch.save(toflow.state_dict(), os.path.join(work_place, 'toflow_models', model_name + '_best_params.pkl'))
-        print('Saved.\n')
-        check_loss = losses / (step + 1)
 
