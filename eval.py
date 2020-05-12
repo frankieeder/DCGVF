@@ -50,7 +50,7 @@ h = 256
 w = 448
 task = 'denoising'
 cuda_flag = True
-model_path = ''
+model_path = './toflow_models/denoise_decomp_best_params_old.pkl'
 
 # Load Pretrained Model
 toflow = TOFlow(h, w, task=task, cuda_flag=cuda_flag).cuda()
