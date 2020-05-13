@@ -35,28 +35,35 @@ def visual_results(x, y, toflow, name):
     rows = 5
     fig.add_subplot(rows, columns, 1)
     show_sample(x[3])
+    plt.set_title("Reference X")
     fig.add_subplot(rows, columns, 2)
     img_hist(x[3])
 
     fig.add_subplot(rows, columns, 3)
     show_sample(y_hat)
+    plt.set_title("Predicted Y")
     fig.add_subplot(rows, columns, 4)
     img_hist(y_hat)
 
     fig.add_subplot(rows, columns, 5)
     show_sample(res)
+    plt.set_title("Residual")
     fig.add_subplot(rows, columns, 6)
-    plt.hist(res_vals.flatten())
+    plt.hist(res_vals)
+    plt.set_title(f"Mean {res_vals.mean()}, Std: {res_vals.std()}")
 
     fig.add_subplot(rows, columns, 7)
     show_sample(y)
+    plt.set_title("Ground Truth Y")
     fig.add_subplot(rows, columns, 8)
     img_hist(y)
 
     fig.add_subplot(rows, columns, 9)
     show_sample(diff)
+    plt.set_title("Ground Truth Difference")
+    plt.set_title(f"Mean {diff_vals.mean()}, Std: {diff_vals.std()}")
     fig.add_subplot(rows, columns, 10)
-    plt.hist(diff_vals.flatten())
+    plt.hist(diff_vals)
 
 
     plt.savefig(name)
@@ -89,20 +96,22 @@ train_loader = DataLoader(vd, sampler=train_sampler, num_workers=2)
 val_loader = DataLoader(vd, sampler=val_sampler, num_workers=2)
 test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
+num_samples = 1
+
 tl_iter = iter(train_loader)
-for i in range(5):
+for i in range(num_samples):
     print(i)
     x, y = next(tl_iter)
     visual_results(x, y, toflow, f'train{i}result.png')
 
 vl_iter = iter(val_loader)
-for i in range(5):
+for i in range(num_samples):
     print(i)
     x, y = next(vl_iter)
     visual_results(x, y, toflow, f'val{i}result.png')
 
 testl_iter = iter(test_loader)
-for i in range(5):
+for i in range(num_samples):
     print(i)
     x, y = next(testl_iter)
     visual_results(x, y, toflow, f'test{i}result.png')
