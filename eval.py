@@ -12,7 +12,7 @@ def show_sample(m):
 def visual_results(x, y, toflow, name):
     x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
     diff = x[3] - y
-    diff_vals = diff.flatten
+    diff_vals = diff.flatten()
     diff -= diff.min()
     max_diff = diff.max()
     diff /= max_diff
