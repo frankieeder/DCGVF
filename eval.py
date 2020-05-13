@@ -65,8 +65,10 @@ def visual_results(x, y, toflow, name):
     plt.hist(diff_vals)
     ax.set_title(f"Mean {diff_vals.mean()}, Std: {diff_vals.std()}")
 
-
+    plt.subplots_adjust(hspace=0.1)
     plt.savefig(name)
+
+
 
 
 # Dataset
@@ -96,7 +98,10 @@ train_loader = DataLoader(vd, sampler=train_sampler, num_workers=2)
 val_loader = DataLoader(vd, sampler=val_sampler, num_workers=2)
 test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
-num_samples = 1
+
+# Saving Visual Samples
+print("Saving Visual Examples...")
+num_samples = 0
 
 tl_iter = iter(train_loader)
 for i in range(num_samples):
