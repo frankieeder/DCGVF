@@ -10,11 +10,14 @@ def show_sample(m):
     plt.axis('off')
 
 def img_hist(im):
+    print(im)
+    print(im.shape)
+    print(im.dtype)
     plt.hist(im.flatten(), bins=2 ** 12, range=(0, 1), density=True)
 
 def visual_results(x, y, toflow, name):
-    x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
-    diff = x[3] - y
+    x, y = x[0].cpu().detach().numpy()[3], y[0].cpu().detach().numpy()
+    diff = x - y
     diff_vals = diff.flatten()
     diff -= diff.min()
     max_diff = diff.max()
@@ -34,10 +37,10 @@ def visual_results(x, y, toflow, name):
     columns = 2
     rows = 5
     ax = fig.add_subplot(rows, columns, 1)
-    show_sample(x[3])
+    show_sample(x)
     ax.set_title("Reference X")
     fig.add_subplot(rows, columns, 2)
-    img_hist(x[3])
+    img_hist(x)
 
     ax = fig.add_subplot(rows, columns, 3)
     show_sample(y_hat)
@@ -65,7 +68,7 @@ def visual_results(x, y, toflow, name):
     plt.hist(diff_vals)
     ax.set_title(f"Mean {diff_vals.mean()}, Std: {diff_vals.std()}")
 
-    plt.subplots_adjust(hspace=0.1)
+    plt.subplots_adjust(hspace=0.4)
     plt.savefig(name)
 
 
