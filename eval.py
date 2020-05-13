@@ -31,17 +31,17 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 1)
     show_sample(x[3])
     fig.add_subplot(rows, columns, 2)
-    plt.hist(x[3].flatten())
+    plt.hist(x[3].flatten(), 2**16)
 
     fig.add_subplot(rows, columns, 3)
     show_sample(y_hat)
     fig.add_subplot(rows, columns, 4)
-    plt.hist(y_hat.flatten())
+    plt.hist(y_hat.flatten(), 2**16)
 
     fig.add_subplot(rows, columns, 5)
     show_sample(res)
     fig.add_subplot(rows, columns, 6)
-    plt.hist(res.flatten())
+    plt.hist(res.flatten(), 2**16)
 
     fig.add_subplot(rows, columns, 7)
     show_sample(y)
