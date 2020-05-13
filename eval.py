@@ -43,12 +43,12 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 5)
     show_sample(res)
     fig.add_subplot(rows, columns, 6)
-    plt.hist(res_vals.flatten(), 2**12)
+    plt.hist(res_vals.flatten())
 
     fig.add_subplot(rows, columns, 7)
     show_sample(y)
     fig.add_subplot(rows, columns, 8)
-    plt.hist(y.flatten())
+    plt.hist(y.flatten(), 2**12)
 
     fig.add_subplot(rows, columns, 9)
     show_sample(diff)
