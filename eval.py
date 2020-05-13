@@ -12,6 +12,7 @@ def show_sample(m):
 def visual_results(x, y, toflow, name):
     x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
     diff = x[3] - y
+    diff_vals = diff.flatten
     diff -= diff.min()
     max_diff = diff.max()
     diff /= max_diff
@@ -20,6 +21,7 @@ def visual_results(x, y, toflow, name):
     y_hat = toflow(x_torch).cpu().detach().numpy()
     y_hat = y_hat[0]
     res = y_hat - y
+    res_vals = res.flatten()
     res -= res.min()
     res /= max_diff # Scale same as original...
 
@@ -31,17 +33,17 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 1)
     show_sample(x[3])
     fig.add_subplot(rows, columns, 2)
-    plt.hist(x[3].flatten(), 2**16)
+    plt.hist(x[3].flatten(), 2**12)
 
     fig.add_subplot(rows, columns, 3)
     show_sample(y_hat)
     fig.add_subplot(rows, columns, 4)
-    plt.hist(y_hat.flatten(), 2**16)
+    plt.hist(y_hat.flatten(), 2**12)
 
     fig.add_subplot(rows, columns, 5)
     show_sample(res)
     fig.add_subplot(rows, columns, 6)
-    plt.hist(res.flatten(), 2**16)
+    plt.hist(res_vals.flatten(), 2**12)
 
     fig.add_subplot(rows, columns, 7)
     show_sample(y)
@@ -51,7 +53,7 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 9)
     show_sample(diff)
     fig.add_subplot(rows, columns, 10)
-    plt.hist(diff.flatten())
+    plt.hist(diff_vals.flatten())
 
 
     plt.savefig(name)
