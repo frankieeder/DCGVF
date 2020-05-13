@@ -101,7 +101,7 @@ test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
 # Saving Visual Samples
 print("Saving Visual Examples...")
-num_samples = 0
+num_samples = 1
 
 tl_iter = iter(train_loader)
 for i in range(num_samples):
