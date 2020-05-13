@@ -38,19 +38,19 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 4)
     plt.hist(y_hat.flatten())
 
-    fig.add_subplot(rows, columns, 9)
+    fig.add_subplot(rows, columns, 5)
     show_sample(res)
-    fig.add_subplot(rows, columns, 10)
+    fig.add_subplot(rows, columns, 6)
     plt.hist(res.flatten())
 
-    fig.add_subplot(rows, columns, 5)
+    fig.add_subplot(rows, columns, 7)
     show_sample(y)
-    fig.add_subplot(rows, columns, 6)
+    fig.add_subplot(rows, columns, 8)
     plt.hist(y.flatten())
 
-    fig.add_subplot(rows, columns, 7)
+    fig.add_subplot(rows, columns, 9)
     show_sample(diff)
-    fig.add_subplot(rows, columns, 8)
+    fig.add_subplot(rows, columns, 10)
     plt.hist(diff.flatten())
 
 
