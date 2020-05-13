@@ -9,6 +9,9 @@ def show_sample(m):
     plt.imshow(np.transpose(m, (1, 2, 0)))
     plt.axis('off')
 
+def img_hist(im):
+    plt.hist(im.flatten(), bins=2 ** 12, range=(0, 1), density=True)
+
 def visual_results(x, y, toflow, name):
     x, y = x[0].cpu().detach().numpy(), y[0].cpu().detach().numpy()
     diff = x[3] - y
@@ -33,12 +36,12 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 1)
     show_sample(x[3])
     fig.add_subplot(rows, columns, 2)
-    plt.hist(x[3].flatten(), 2**12)
+    img_hist(x[3])
 
     fig.add_subplot(rows, columns, 3)
     show_sample(y_hat)
     fig.add_subplot(rows, columns, 4)
-    plt.hist(y_hat.flatten(), 2**12)
+    img_hist(y_hat)
 
     fig.add_subplot(rows, columns, 5)
     show_sample(res)
@@ -48,7 +51,7 @@ def visual_results(x, y, toflow, name):
     fig.add_subplot(rows, columns, 7)
     show_sample(y)
     fig.add_subplot(rows, columns, 8)
-    plt.hist(y.flatten(), 2**12)
+    img_hist(y)
 
     fig.add_subplot(rows, columns, 9)
     show_sample(diff)
