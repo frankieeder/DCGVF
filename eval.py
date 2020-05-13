@@ -54,7 +54,7 @@ def visual_results(x, y, toflow, name):
 
     ax = fig.add_subplot(rows, columns, 7)
     show_sample(y)
-    ax.plt.set_title("Ground Truth Y")
+    ax.set_title("Ground Truth Y")
     fig.add_subplot(rows, columns, 8)
     img_hist(y)
 
