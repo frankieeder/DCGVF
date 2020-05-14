@@ -68,9 +68,28 @@ SSIMloss = pytorch_ssim.SSIM()
 
 totalL1Loss = 0
 totalL2Loss = 0
+totalL1std = 0
+totalL2std = 0
 totalGTL1Loss = 0
 totalGTL2Loss = 0
 totalSSIMLoss = 0
+
+total10BitAcc = 0
+total10BitPrec = 0
+total11BitAcc = 0
+total11BitPrec = 0
+total12BitAcc = 0
+total12BitPrec = 0
+
+def bitThresholdPercentage(L1, bd):
+    thresh = 2**(-bd)
+    return (L1 < thresh).int().sum().float() / L1.numel()
+
+def bitBucketPercentage(L1, bd):
+    buckets = torch.fmod((L1*(2**bd)).int(), 2**(bd-8))
+    bucketPerc = (buckets != 0).int().sum().float() / L1.numel()
+    return bucketPerc
+
 for i, sample in enumerate(test_loader):
     i = i+1
     print(f"Computing sample {i}/{len(test_ind)}")
@@ -89,10 +108,21 @@ for i, sample in enumerate(test_loader):
 
         res = prediction - reference
         #this_L2loss = L2loss(prediction, reference)
-        totalL2Loss += (res ** 2).mean() #this_L2loss.item()
+        L2 = (res ** 2)
+        totalL2Loss += L2.mean() #this_L2loss.item()
+        totalL2std += L2.std()
 
         #this_L1loss = L1loss(prediction, reference)
-        totalL1Loss += torch.abs(res).mean() #this_L1loss.item()
+        L1 = torch.abs(res)
+        totalL1Loss += L1.mean() #this_L1loss.item()
+        totalL1std += L1.std()
+
+        total10BitAcc += bitThresholdPercentage(L1, 10)
+        total10BitPrec += bitBucketPercentage(L1, 10)
+        total11BitAcc += bitThresholdPercentage(L1, 11)
+        total11BitPrec += bitBucketPercentage(L1, 11)
+        total12BitAcc += bitThresholdPercentage(L1, 12)
+        total12BitPrec += bitBucketPercentage(L1, 12)
 
         #print(x[:, 3].shape)
         #print(reference.shape)
@@ -103,6 +133,11 @@ for i, sample in enumerate(test_loader):
 
         #this_GTL1loss = L1loss(x[:, 3], reference)
         totalGTL1Loss += torch.abs(diff).mean() #this_GTL1loss.item()
-    print(f"Ranges x:{x.min(), x.max()}, y:[{y.min(), y.max()}, yp: {prediction.min(), prediction.max()}")
-    print(f"Avg L2 Loss: {totalL2Loss / i}, Avg L1 Loss: {totalL1Loss / i}, Avg SSIM Loss: {totalSSIMLoss / i}")
+    #print(f"Ranges x:{x.min(), x.max()}, y:[{y.min(), y.max()}, yp: {prediction.min(), prediction.max()}")
+    print(f"Avg L2 Loss: {totalL2Loss / i}, Avg L2 Loss Std: {totalL2std / i}")
+    print(f"Avg L1 Loss: {totalL1Loss / i}, Avg L1 Loss Std: {totalL1std / i}")
+    print(f"Avg SSIM: {totalSSIMLoss / i}")
+    print(f"Avg 10 Bit Acc, Prec: {total10BitAcc / i}, {total10BitPrec / i}")
+    print(f"Avg 11 Bit Acc, Prec: {total11BitAcc / i}, {total11BitPrec / i}")
+    print(f"Avg 12 Bit Acc, Prec: {total12BitAcc / i}, {total12BitPrec / i}")
     print(f"Avg GT L2 Loss: {totalGTL2Loss / i}, Avg GT L1 Loss: {totalGTL1Loss / i}")
