@@ -4,6 +4,7 @@ import numpy as np
 import torch
 from torch.utils.data import SubsetRandomSampler, DataLoader
 from pytoflow.Network import TOFlow
+import pytorch_ssim
 
 def save_results(sample, toflow, name):
     x, y = sample
@@ -61,3 +62,47 @@ for i in range(num_samples):
     s = next(testl_iter)
     save_results(s, toflow, f'test{i}result.npz')
 
+L2loss = torch.nn.MSELoss()
+L1loss = torch.nn.L1Loss()
+SSIMloss = pytorch_ssim.SSIM()
+
+totalL1Loss = 0
+totalL2Loss = 0
+totalGTL1Loss = 0
+totalGTL2Loss = 0
+totalSSIMLoss = 0
+for i, sample in enumerate(test_loader):
+    i = i+1
+    print(f"Computing sample {i}/{len(test_ind)}")
+    x, y = sample
+    x = x.cuda()
+    print(f"{x.min(), x.max()}")
+    X = x.clone()
+    reference = y.cuda()
+
+    prediction = toflow(X)
+    prediction = prediction.cuda()
+
+    with torch.no_grad():
+        thisSSIMLoss = SSIMloss(prediction, reference)
+        totalSSIMLoss += thisSSIMLoss.item()
+
+        res = prediction - reference
+        #this_L2loss = L2loss(prediction, reference)
+        totalL2Loss += (res ** 2).mean() #this_L2loss.item()
+
+        #this_L1loss = L1loss(prediction, reference)
+        totalL1Loss += torch.abs(res).mean() #this_L1loss.item()
+
+        #print(x[:, 3].shape)
+        #print(reference.shape)
+        
+        diff = x[:,3] - reference
+        #this_GTL2loss = L2loss(x[:, 3], reference)
+        totalGTL2Loss += (diff**2).mean() #this_GTL2loss.item()
+
+        #this_GTL1loss = L1loss(x[:, 3], reference)
+        totalGTL1Loss += torch.abs(diff).mean() #this_GTL1loss.item()
+    print(f"Ranges x:{x.min(), x.max()}, y:[{y.min(), y.max()}, yp: {prediction.min(), prediction.max()}")
+    print(f"Avg L2 Loss: {totalL2Loss / i}, Avg L1 Loss: {totalL1Loss / i}, Avg SSIM Loss: {totalSSIMLoss / i}")
+    print(f"Avg GT L2 Loss: {totalGTL2Loss / i}, Avg GT L1 Loss: {totalGTL1Loss / i}")
