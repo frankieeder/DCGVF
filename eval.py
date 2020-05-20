@@ -28,7 +28,7 @@ h = 256
 w = 448
 task = 'denoising'
 cuda_flag = True
-model_path = './toflow_models/denoise_decomp_best_params_old.pkl'
+model_path = './toflow_models/denoise_decomp_best_params.pkl'
 
 # Load Pretrained Model
 toflow = TOFlow(h, w, task=task, cuda_flag=cuda_flag).cuda()
@@ -42,22 +42,21 @@ test_loader = DataLoader(vd, sampler=test_sampler, num_workers=2)
 
 # Saving Visual Samples
 print("Saving Visual Examples...")
-num_samples = 5
 
 tl_iter = iter(train_loader)
-for i in range(num_samples):
+for i in range(5):
     print(i)
     s = next(tl_iter)
     save_results(s, toflow, f'train{i}result.npz')\
 
 vl_iter = iter(val_loader)
-for i in range(num_samples):
+for i in range(5):
     print(i)
     s = next(vl_iter)
     save_results(s, toflow, f'val{i}result.npz')
 
 testl_iter = iter(test_loader)
-for i in range(num_samples):
+for i in range(20):
     print(i)
     s = next(testl_iter)
     save_results(s, toflow, f'test{i}result.npz')
