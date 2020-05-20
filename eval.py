@@ -8,7 +8,7 @@ from pytoflow.Network import TOFlow
 def save_results(sample, toflow, name):
     x, y = sample
     y_hat = toflow(x.cuda())
-    y_hat = y_hat[0].cpu().detach().numpy()
+    y_hat = y_hat.cpu().detach().numpy()
     np.savez_compressed(name, x=x, y=y, y_hat=y_hat)
 
 # Dataset
