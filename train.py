@@ -112,7 +112,7 @@ loss_func = torch.nn.L1Loss()
 
 # Dataset
 vd = SampleDataset("../dcgvf_data/processed_decomp")
-if False:
+if False: # Show some visual samples from dataset
     for i in range(3):
         compare_sample(vd[i])
         plt.savefig(f"sample_{model_name}{i}.jpg")

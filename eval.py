@@ -81,11 +81,16 @@ total12BitAcc = 0
 total12BitPrec = 0
 
 def bitThresholdPercentage(L1, bd):
+    """Compute Percentage of samples with at least bd-bit accuracy,
+    leveraging an input diff image (L1 Loss Image)"""
     thresh = 2**(-bd)
     return (L1 < thresh).int().sum().float() / L1.numel()
 
-def bitBucketPercentage(L1, bd):
-    buckets = torch.fmod((L1*(2**bd)).int(), 2**(bd-8))
+def bitBucketPercentage(L1, bd, comp_bd=8):
+    """Compute Percentage of samples with at least bd-bit precision,
+    that is that fall outside of strictly a quantized comp_bd bin.
+    """
+    buckets = torch.fmod((L1*(2**bd)).int(), 2**(bd-comp_bd))
     bucketPerc = (buckets != 0).int().sum().float() / L1.numel()
     return bucketPerc
 
@@ -94,7 +99,7 @@ for i, sample in enumerate(test_loader):
     print(f"Computing sample {i}/{len(test_ind)}")
     x, y = sample
     x = x.cuda()
-    print(f"{x.min(), x.max()}")
+    #print(f"{x.min(), x.max()}")
     X = x.clone()
     reference = y.cuda()
 

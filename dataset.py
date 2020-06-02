@@ -5,6 +5,10 @@ import os
 
 class SampleDataset(Dataset):
     def __init__(self, root, ext='.npz'):
+        """PyTorch Dataset that aggregated precomputed dataset samples.
+        :param root: Folder that contains the precomputed samples
+        :param ext: Suffix of precomputed samples
+        """
         self.root = root
         self.files = []
         for cd, folders, files in os.walk(root):
@@ -33,7 +37,7 @@ class SampleDataset(Dataset):
         return x, y
 
 class HistEqualizedSampleDataset(SampleDataset):
-    """Basic Dataset with Histogram Equalization"""
+    """Basic Dataset with Histogram Equalization. To Be Completed."""
     def __getitem__(self, i):
         x, y = super().__getitem__(i)
 
@@ -62,6 +66,7 @@ class HistEqualizedSampleDataset(SampleDataset):
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    dataset_dir = '/Volumes/Elements/dcgvf_data/processed_decomp'
 
     def show_sample(m):
         plt.imshow(np.transpose(m, (1, 2, 0)))
@@ -90,10 +95,8 @@ if __name__ == "__main__":
             show_sample(img)
         plt.show()
 
-    vd = SampleDataset('/Volumes/Elements/dcgvf_data/processed_decomp')
-    #compare_sample(vd[0])
+    vd = SampleDataset(dataset_dir)
+    compare_sample(vd[0])
 
-    vd_eq = HistEqualizedSampleDataset('/Volumes/Elements/dcgvf_data/processed_decomp')
-    compare_sample(vd_eq[0])
-
-    x=2
+    #vd_eq = HistEqualizedSampleDataset('/Volumes/Elements/dcgvf_data/processed_decomp')
+    #compare_sample(vd_eq[0])

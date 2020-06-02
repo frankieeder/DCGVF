@@ -5,11 +5,14 @@ import ffmpeg
 
 
 class BDIPreProcessor:
-    """Creates a dataset by randomly sampling the input files."""
+    """Creates a dataset by randomly sampling the input files, both temporally and spatially.
+    This PreProcessor creates a dataset for use with Bit Depth Interpolation.
+    """
 
     def __init__(self, data_folder, out_folder, output_size, size_targ, stride,
                  reference_ind, ns_retrieval,
                  search_suffix="", files_per_folder=50, start_count=None):
+        """"""
         self.data_folder = data_folder
         self.out_folder = out_folder
         self.output_size = output_size
@@ -159,6 +162,9 @@ class BDIPreProcessor:
 
 
 class DecompressionPreProcessor(BDIPreProcessor):
+    """This ProProcessor extends BDIPreProcessor to instead compress the footage to create
+    a dataset for decompression/deblocking.
+    """
     def get_sample_full_frame(self):
         vid_num = np.random.choice(np.arange(len(self.all_files)), p=self.file_probs)
         vid_dir = self.all_files[vid_num]

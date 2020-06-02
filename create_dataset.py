@@ -26,6 +26,3 @@ decomp_proc = DecompressionPreProcessor(
     search_suffix='_001.mov'
 )
 decomp_proc.process()
-
-
-
